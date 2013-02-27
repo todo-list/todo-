@@ -55,9 +55,9 @@ public class Utils
     public static final int FIELD_IMPORTANT = 5;
     public static final int FIELD_CHECKBOX = 6;
 
-	public static final int DELETE_SOUND = R.raw.recycle;
+	public static final int DELETE_SOUND = R.raw.delete;
 	public static final int ADD_SOUND = R.raw.button_add;
-	public static final int LOUD_NOTIFICATION__SOUND = R.raw.notification_loud;
+	public static final int LOUD_NOTIFICATION__SOUND = R.raw.loud_alarm;
 	
 	public static final int ALARM_ON_IMAGE = R.drawable.alarm_turquoise;
 	public static final int ALARM_OFF_IMAGE = R.drawable.alarm_gray3;

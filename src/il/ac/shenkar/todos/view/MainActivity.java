@@ -184,7 +184,6 @@ public class MainActivity extends Activity
 		// Setting this scroll listener is required to ensure that during ListView scrolling,
 		// we don't look for swipes.
 		expandableListView.setOnScrollListener(touchListener.makeScrollListener());
-		//listView.setOnItemClickListener(this);
 		registerForContextMenu(expandableListView);
 		// retrieve all the application data stored in the data base 
 		taskListModel.retrieveData();

@@ -106,8 +106,8 @@ public final class R {
     }
     public static final class raw {
         public static final int button_add=0x7f050000;
-        public static final int notification_loud=0x7f050001;
-        public static final int recycle=0x7f050002;
+        public static final int delete=0x7f050001;
+        public static final int loud_alarm=0x7f050002;
     }
     public static final class string {
         public static final int alert_dialog_cancel=0x7f06000c;
