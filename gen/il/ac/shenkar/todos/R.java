@@ -44,7 +44,6 @@ public final class R {
         public static final int widget=0x7f020012;
     }
     public static final class id {
-        public static final int LinearLayout_main=0x7f0a000b;
         public static final int btnAdd=0x7f0a000d;
         public static final int btnDone=0x7f0a0008;
         public static final int change_language=0x7f0a0023;
@@ -63,6 +62,7 @@ public final class R {
         public static final int helpLayout=0x7f0a0005;
         public static final int imageView=0x7f0a000e;
         public static final int interval_spinner=0x7f0a001a;
+        public static final int layout_main=0x7f0a000b;
         public static final int line1=0x7f0a001e;
         public static final int line2=0x7f0a0020;
         public static final int listV_main=0x7f0a000c;

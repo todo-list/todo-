@@ -59,7 +59,7 @@ import com.google.analytics.tracking.android.Tracker;
 /** 
  * Main application activity 
  */
-public class MainActivity extends Activity
+public class MainActivity extends Activity 
 	implements OnClickListener,  OnTouchListener,
 	ItemListBaseAdapter.NoticeAlarmListener, AlarmAlertDialog.SetAlarmListener
 {
@@ -83,7 +83,7 @@ public class MainActivity extends Activity
 	// used for google analytics purposes
 	private GoogleAnalytics 	myInstance; 
 	// the user entered text in alert dialog
-	private RelativeLayout 		getLinearLayout;
+	private RelativeLayout 		mainLayout;
 	private SensorManager 		mSensorManager;
 	private ShakeEventListener 	mSensorListener;
 	// manages sounds in the application
@@ -92,7 +92,7 @@ public class MainActivity extends Activity
 	public static ImageView		noTasksImage;
 	// custom base adapter
 	private static ItemListBaseAdapter	adapter;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -113,8 +113,8 @@ public class MainActivity extends Activity
 		titleTextField = (EditText) findViewById(R.id.edit_message);
 		Button addButton = (Button) findViewById(R.id.btnAdd);
 		addButton.setOnClickListener(this);
-		getLinearLayout = (RelativeLayout) findViewById(R.id.LinearLayout_main);
-		getLinearLayout.setOnTouchListener(this);
+		mainLayout = (RelativeLayout) findViewById(R.id.layout_main);
+		mainLayout.setOnTouchListener(this);
 		viewContainer = findViewById(R.id.undobar);		
 		myInstance = GoogleAnalytics.getInstance(getApplicationContext());
 		taskToUndo = new Task();
@@ -132,8 +132,8 @@ public class MainActivity extends Activity
 		taskListModel.getDataBase().open();
 
 		LocalBroadcastManager.getInstance(this).registerReceiver(
-	            mMessageReceiver, new IntentFilter("dataSetChanged"));
-		
+				mMessageReceiver, new IntentFilter("dataSetChanged"));
+
 		mSensorListener.setOnShakeListener(new ShakeEventListener.OnShakeListener() 
 		{
 			public void onShake() 
@@ -201,7 +201,7 @@ public class MainActivity extends Activity
 		// set application language 
 		Utils.ENGLISH_LANGUAGE = loadPreferences(Utils.LANGUAGE);
 		Utils.IS_DEFAULT_SOUND = loadPreferences(Utils.LOUD_SOUND);
-		
+
 		if (Utils.ENGLISH_LANGUAGE == false)
 		{
 			titleTextField.setHint(Utils.HEBREW_TITLE_ENTER);
@@ -257,14 +257,9 @@ public class MainActivity extends Activity
 	@Override
 	public boolean onTouch(View v, MotionEvent event) 
 	{
-		// if a touch was made on the screen outside the keyboard 
-		if (v == getLinearLayout)
-		{
-			// hide keyboard
-			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(titleTextField.getWindowToken(), 0);
-			return true;
-		}
+		// hide keyboard
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 		return false;
 	} 
 
@@ -295,28 +290,28 @@ public class MainActivity extends Activity
 	// listen for messages from NotificationService
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() 
 	{
-	    @Override
-	    public void onReceive(Context context, Intent intent)
-	    {
-	    	int taskId = intent.getIntExtra("id", -1);
-	    	String alarmType = intent.getStringExtra("alarmType");
-	    	
-	    	if (taskId != -1 && alarmType != null)
-	    	{
-	    		int adapterPosition = adapter.findAdapterPosition(taskId);
-	    		
-	    		if (alarmType.equals("GPS"))
-	    		{
-	    			((Task) adapter.getGroup(adapterPosition)).setLocation(Utils.DEFUALT_LOCATION);
-	    		}
-	    		else
-	    		{
-		    		((Task) adapter.getGroup(adapterPosition)).setAlarmImage(Utils.ALARM_OFF_IMAGE);
-		    		((Task) adapter.getGroup(adapterPosition)).setDate(Utils.DEFUALT_NOTIFICATION);
-	    		}
-	    		adapter.notifyDataSetChanged();
-	    	}
-	    }
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			int taskId = intent.getIntExtra("id", -1);
+			String alarmType = intent.getStringExtra("alarmType");
+
+			if (taskId != -1 && alarmType != null)
+			{
+				int adapterPosition = adapter.findAdapterPosition(taskId);
+
+				if (alarmType.equals("GPS"))
+				{
+					((Task) adapter.getGroup(adapterPosition)).setLocation(Utils.DEFUALT_LOCATION);
+				}
+				else
+				{
+					((Task) adapter.getGroup(adapterPosition)).setAlarmImage(Utils.ALARM_OFF_IMAGE);
+					((Task) adapter.getGroup(adapterPosition)).setDate(Utils.DEFUALT_NOTIFICATION);
+				}
+				adapter.notifyDataSetChanged();
+			}
+		}
 	};
 
 	// creates the task properties menu on long click
@@ -327,23 +322,23 @@ public class MainActivity extends Activity
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.context_menu, menu);
 		menu.setHeaderTitle("Task Menu");
-		 
+
 		ExpandableListView.ExpandableListContextMenuInfo info =
-	            (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
-		
+				(ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+
 		// stores current item position
 		int position = ExpandableListView.getPackedPositionGroup(info.packedPosition);
 		// current task description
 		String taskDescription = taskListModel.getTaskAt(position).getTaskDescription();
 		// is task marked as important
 		boolean isImportant = taskListModel.getTaskAt(position).isImportant();
-		
+
 		if (Utils.ENGLISH_LANGUAGE == false)
 		{
 			// make hebrew menu
 			menu.setHeaderTitle("מאפייני משימה");
 			Utils.makeHebrewContextMenu(menu);
-			
+
 			if (taskDescription.equals(Utils.DEFAULT_DESCRIPTION)) 
 			{
 				MenuItem item = menu.findItem(R.id.editDescription);
@@ -379,7 +374,7 @@ public class MainActivity extends Activity
 		// holds current item position
 		int index = ExpandableListView.getPackedPositionGroup(info.packedPosition);
 		currentPosition = index;
-		
+
 		// determines which item was selected at the menu
 		switch (menuItem.getItemId()) 
 		{
@@ -417,7 +412,7 @@ public class MainActivity extends Activity
 			alertDialog.setArguments(getArguments(Utils.DIALOG_TEXT_ENTRY,index,Utils.SET_LOCATION));
 			alertDialog.show(getFragmentManager(),"ShowAlertDialog");
 			return true;
-			
+
 		case R.id.share:			
 			shareTask(index);
 
@@ -425,7 +420,7 @@ public class MainActivity extends Activity
 			return super.onContextItemSelected(menuItem);
 		}
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu item)
 	{
@@ -461,7 +456,7 @@ public class MainActivity extends Activity
 			alertDialog.show(getFragmentManager(),"ShowAlertDialog");
 			adapter.notifyDataSetChanged();
 			return true;
-			
+
 		case R.id.change_language:
 			if (Utils.ENGLISH_LANGUAGE)
 			{
@@ -477,7 +472,7 @@ public class MainActivity extends Activity
 			}
 			adapter.notifyDataSetChanged();
 			return true;
-					
+
 		case R.id.change_notification_sound:
 			Utils.IS_DEFAULT_SOUND = ! Utils.IS_DEFAULT_SOUND;
 			return true;
@@ -485,7 +480,7 @@ public class MainActivity extends Activity
 		case R.id.help:
 			startActivity(new Intent(this, HelpScreenActivity.class));
 			return true;
-			
+
 		default: 
 			return true;
 		}
@@ -537,7 +532,7 @@ public class MainActivity extends Activity
 		{
 			// get the user selected time interval
 			repeatAlarmInterval = notificationPopup.getSelectedInterval();
-			
+
 			fullDate += "\n(" + notificationPopup.getSelectedIntervalString() + ")";
 		}
 		else
@@ -605,7 +600,7 @@ public class MainActivity extends Activity
 		args.putString("dialogTitle",title);
 		return args;
 	}
-	
+
 	/**
 	 * Shares task data among applications
 	 * 
@@ -622,7 +617,7 @@ public class MainActivity extends Activity
 		sendIntent.setType("text/plain");
 		startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
 	}
-	
+
 	/**
 	 * Check if user has activated the application for the first time
 	 * 
@@ -640,7 +635,7 @@ public class MainActivity extends Activity
 			return false;
 		}
 	}
-	
+
 	private void savePreferences(String key, boolean value)
 	{
 		SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
@@ -655,7 +650,7 @@ public class MainActivity extends Activity
 		SharedPreferences settings = getSharedPreferences("MyPrefsFile", 0);
 		return settings.getBoolean(key, false);
 	}
-	
+
 	public static ItemListBaseAdapter getAdapter()
 	{
 		return adapter;

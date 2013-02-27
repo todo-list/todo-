@@ -45,7 +45,7 @@ public class AlertDialogs extends DialogFragment
 		id =  getArguments().getInt("id");
 		currentPosition = getArguments().getInt("position");
 		dialogTitle = getArguments().getString("dialogTitle");
-		String newTitle = "Delete All Tasks?";
+		String newTitle = "Title";
 		
 		if (Utils.ENGLISH_LANGUAGE == false)
 		{
@@ -65,6 +65,7 @@ public class AlertDialogs extends DialogFragment
 			{
 				newTitle = "הכנס מיקום";
 			}
+			dialogTitle = newTitle;
 		}
 		
 		// Use the Builder class for convenient dialog construction
@@ -75,7 +76,7 @@ public class AlertDialogs extends DialogFragment
 		{
 		case Utils.DIALOG_YES_NO_MESSAGE:
 			builder.setIconAttribute(android.R.attr.alertDialogIcon)
-			.setTitle(newTitle)
+			.setTitle(dialogTitle)
 			.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener()
 			{
 				public void onClick(DialogInterface dialog, int whichButton)
@@ -116,7 +117,7 @@ public class AlertDialogs extends DialogFragment
 				}
 			}
 			
-			builder.setTitle(newTitle)
+			builder.setTitle(dialogTitle)
 			.setView(layout)
 			.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() 
 			{
@@ -168,7 +169,7 @@ public class AlertDialogs extends DialogFragment
 				editText.setText(taskListModel.getTaskAt(currentPosition).getTaskDescription());
 			}
 			
-			builder.setTitle(newTitle)
+			builder.setTitle(dialogTitle)
 			.setView(layout)
 			.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener()
 			{
