@@ -46,7 +46,7 @@ public class WidgetProvider extends AppWidgetProvider
 			int appWidgetId = appWidgetIds[i];
 			// Create an Intent to launch TextToSpeech service
 			Intent intent = new Intent(context, TextToSpeechService.class);
-			PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+			PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 			// Get the layout for the App Widget and attach an on-click listener
 			// to the button
