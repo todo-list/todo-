@@ -46,6 +46,7 @@ public class AlertDialogs extends DialogFragment
 		currentPosition = getArguments().getInt("position");
 		dialogTitle = getArguments().getString("dialogTitle");
 		String newTitle = "Title";
+		final String action = dialogTitle;
 		
 		if (Utils.ENGLISH_LANGUAGE == false)
 		{
@@ -101,7 +102,7 @@ public class AlertDialogs extends DialogFragment
 			layout = inflater.inflate(R.layout.alert_dialog_text_entry, null);
 			editText = (EditText) layout.findViewById(R.id.field_edit);
 			
-			if (dialogTitle.equals(Utils.EDIT_TITLE))
+			if (action.equals(Utils.EDIT_TITLE))
 			{
 				editText.setText(taskListModel.getTaskAt(currentPosition).getTaskTitle());
 			}
@@ -123,7 +124,7 @@ public class AlertDialogs extends DialogFragment
 			{
 				public void onClick(DialogInterface dialog, int whichButton)
 				{
-					if (dialogTitle.equals(Utils.EDIT_TITLE))
+					if (action.equals(Utils.EDIT_TITLE))
 					{
 						taskListModel.updateTitle(editText.getText().toString(), currentPosition);
 					}
